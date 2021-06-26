@@ -1,8 +1,9 @@
 const Usuario = require('./usuarios-modelo')
 
 const tokens = require('./tokens')
-const { EmailVerificacao } = require('./emails')
+const { EmailVerificacao, EmailRedefinicaoSenha } = require('./emails')
 const { ConversorUsuario } = require('../conversores')
+const { NaoEncontrado } = require('../erros')
 
 function geraEndereco (rota, token) {
   const baseURL = process.env.BASE_URL
@@ -86,6 +87,29 @@ module.exports = {
       res.status(200).json()
     } catch (erro) {
       proximo(erro)
+    }
+  },
+
+  async esqueciMinhaSenha (req, res, proximo) {
+    const respostaPadrao = {
+      mensage: 'Se encontrarmos um usuário com este email, ' +
+     'vamos enviar uma mensagem com as instruções para redefinir a senha'
+    }
+    try {
+      const email = req.body.email
+      const usuario = await Usuario.buscaPorEmail(email)
+
+      const emailRedefinicao = new EmailRedefinicaoSenha(usuario)
+      await emailRedefinicao.enviaEmail()
+
+      res.send(respostaPadrao)
+    } catch (error) {
+      if (error instanceof NaoEncontrado) {
+        res.send(respostaPadrao)
+        return
+      }
+
+      proximo(error)
     }
   }
 }
