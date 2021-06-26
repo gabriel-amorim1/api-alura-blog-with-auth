@@ -5,6 +5,7 @@ const port = 3000
 require('./database')
 require('./redis/blocklist-access-token')
 require('./redis/allowlist-refresh-token')
+const { ConversorErro } = require('./src/conversores')
 
 app.use((requisicao, resposta, proximo) => {
   const accept = requisicao.get('Content-Type')
@@ -54,7 +55,8 @@ app.use((erro, requisicao, resposta, proximo) => {
     corpo.expiradoEm = erro.expiredAt
   }
 
-  resposta.status(status).json(corpo)
+  const conversor = new ConversorErro('json')
+  resposta.status(status).send(conversor.converter(corpo))
 })
 
 app.listen(port, () => console.log('A API está funcionando!'))
