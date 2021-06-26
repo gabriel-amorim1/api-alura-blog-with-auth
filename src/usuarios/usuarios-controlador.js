@@ -10,6 +10,7 @@ function geraEndereco (rota, token) {
 
 module.exports = {
   async adiciona (req, res, proximo) {
+    console.log(req.body)
     const { nome, email, senha, cargo } = req.body
 
     try {

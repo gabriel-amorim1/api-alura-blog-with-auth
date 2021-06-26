@@ -20,7 +20,7 @@ module.exports = (entidade, acao) => (requisicao, resposta, proximo) => {
   const acoes = metodos[acao]
   const permissaoTodos = permissoesDoCargo[acoes.todos](entidade)
   const permissaoApenasSeu = permissoesDoCargo[acoes.apenasSeu](entidade)
-
+  console.log(permissaoTodos)
   if (!permissaoApenasSeu.grandted && !permissaoTodos.granted) {
     resposta.status(403)
     resposta.end()

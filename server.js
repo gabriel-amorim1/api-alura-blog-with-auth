@@ -7,7 +7,7 @@ require('./redis/blocklist-access-token')
 require('./redis/allowlist-refresh-token')
 
 app.use((requisicao, resposta, proximo) => {
-  const accept = requisicao.get('Accept')
+  const accept = requisicao.get('Content-Type')
 
   if (accept.indexOf('application/json')) {
     resposta.status(406)

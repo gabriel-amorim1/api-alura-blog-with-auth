@@ -3,7 +3,7 @@ const controle = new AccessControl()
 
 controle
   .grant('assinante')
-  .readAny('post', ['id', 'titulo', 'conteudo'])
+  .readAny('post', ['id', 'titulo', 'conteudo', 'autor'])
 
 controle
   .grant('editor')
@@ -14,6 +14,7 @@ controle
 controle
   .grant('admin')
   .createAny('post')
+  .readAny('post')
   .deleteAny('post')
   .readAny('usuario')
   .deleteAny('usuario')
