@@ -99,7 +99,9 @@ module.exports = {
       const email = req.body.email
       const usuario = await Usuario.buscaPorEmail(email)
 
-      const emailRedefinicao = new EmailRedefinicaoSenha(usuario)
+      const token = await tokens.redefinicaoDeSenha.criarToken(usuario.id)
+
+      const emailRedefinicao = new EmailRedefinicaoSenha(usuario, token)
       await emailRedefinicao.enviaEmail()
 
       res.send(respostaPadrao)
